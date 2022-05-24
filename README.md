@@ -20,11 +20,12 @@ API with Typescript - Express - MySQL
 - Proyecto testeado en Kali Linux y Windows 10.
 - Ver changelogs/testReports. Importar json a postman para poder probar.
 - El proyecto inicializa y carga datos basicos. Esta configurado para que al reiniciar el servidor se eliminen y vuelvan a recargar los datos. Por lo tanto, los datos previos se perderan. Para evitar esto, si se requiere, en config/server/Server.ts linea 67, pasar {force:true} a  {force:false} y recomiendo eliminar la funcion pasada por parametro en index.ts.
- 
+
 
 ## Testing POSTMAN/NEWMAN
 > Ver en changelogs/testReports
 - se puede acceder al ultimo test desde el navegador http://localhost:8090/
+- Version de la api en  http://localhost:8090/api/v1/version
 - env.json (variables de entorno) exportado de postman
 - test.json (requests) exportado de postman
 - Ambos pueden ser importados a postman
@@ -75,5 +76,11 @@ docker-compose down
 - reemplazr en .env de la raiz del proyecto
 
 
+## PENDIENTE: Iniciado pero incompleto
 
+> Proceso de autenticacion.
+
+> Se crearon 2 tablas para Manager y Credentials que manejaran un proceso de login sencillo
+
+> Luego se implementaran los middlewares correspondientes
 

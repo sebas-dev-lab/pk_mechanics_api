@@ -52,6 +52,9 @@ export default class Server extends Envconfig implements ServerInterface {
       res.setHeader('X-Powered-By', 'VSL');
       next();
     });
+    this.app.get('/api/v1/version', (req, res) =>{
+      res.sendFile(path.join(__dirname, '/config.version.server.json'));
+    })
     this.app.get('/', (req, res) =>{
       res.sendFile(path.join(__dirname, '../../ViewReport/index.html'));
     })

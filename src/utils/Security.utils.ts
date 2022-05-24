@@ -68,50 +68,6 @@ class SecurityUtils {
 
   }
 
-  static async getPbkey(type:string, id:any ) {
-    try {
-      let pbkey = await db.User.findOne({
-        where: {
-          [type]: id,
-        },
-        attributes: [],
-        include: [
-          {
-            model: db.CredentialsUserData,
-            attributes: ['pbkey'],
-          },
-        ],
-      });
-      console.log(pbkey)
-      return pbkey;
-    } catch (e) {
-      console.log(e);
-      throw e;
-    }
-  }
-
-  static async getPvkey(type:string, id: any ) {
-    try {
-      let secret = await db.User.findOne({
-        where: {
-          [type]: id,
-        },
-        attributes: [],
-        include: [
-          {
-            model: db.CredentialsUserData,
-            attributes: ['wsecret'],
-          },
-        ],
-      });
-      console.log(secret)
-      return secret;
-    } catch (e) {
-      console.log(e);
-      throw e;
-    }
-  }
-
   /**
    * @description decript rsa
    */
