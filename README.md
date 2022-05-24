@@ -16,7 +16,7 @@ API with Typescript - Express - MySQL
 
 ## Descripcion
 
-- El proyecto se puede levantar localmente ya sea con/sin docker-compose, en el primer caso no es necesario instalar MySQL ya que se creara un contenedor con MySQL y otro dond se alojara la api.
+- El proyecto se puede levantar localmente ya sea con/sin docker-compose, en el primer caso no es necesario instalar MySQL ya que se creara un contenedor con MySQL y otro donde se alojara la api.
 - Proyecto testeado en Kali Linux y Windows 10.
 - Ver changelogs/testReports. Importar json a postman para poder probar.
 - El proyecto inicializa y carga datos basicos. Esta configurado para que al reiniciar el servidor se eliminen y vuelvan a recargar los datos. Por lo tanto, los datos previos se perderan. Para evitar esto, si se requiere, en config/server/Server.ts linea 67, pasar {force:true} a  {force:false} y recomiendo eliminar la funcion pasada por parametro en index.ts.
