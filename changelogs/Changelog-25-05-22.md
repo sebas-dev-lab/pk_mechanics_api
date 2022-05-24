@@ -18,9 +18,13 @@
 > Se implementan crud segun requerimientos
 
 > Se crea Crud de Owner
+
 > Se crea Crud de Car
+
 > Se crea Crud de Policy
+
 > Se crea Crud de Services
+
 > Se crea Crud de Transactions
 
 ## Documentation ##
@@ -32,8 +36,6 @@
 > Variables de entorno en testReports/envs
 
 ## Enviroments Modified ##
-
-> Modificar valores de redes sociales
 
 ```
 ## / =================== SERVER ======================== /
