@@ -1,0 +1,74 @@
+[
+  {
+    "owner": "00000001",
+    "brand": "audi",
+    "model": "a4",
+    "year": "2012",
+    "patent": "aud001",
+    "color": "negro",
+    "owid" : "1"
+  },
+  {
+    "owner": "00000002",
+    "brand": "ford",
+    "model": "focus",
+    "year": "2016",
+    "patent": "for002",
+    "color": "gris",
+    "owid" : "2"
+  },
+  {
+    "owner": "00000003",
+    "brand": "renault",
+    "model": "clio",
+    "year": "2008",
+    "patent": "cli003",
+    "color": "negro",
+    "owid" : "2"
+  },
+  {
+    "owner": "00000004",
+    "brand": "chevrolet",
+    "model": "cruze",
+    "year": "2019",
+    "patent": "che004",
+    "color": "azul",
+    "owid" : "3"
+  },
+  {
+    "owner": "00000005",
+    "brand": "citroen",
+    "model": "c3",
+    "year": "2017",
+    "patent": "cit005",
+    "color": "blanco",
+    "owid" : "4"
+  },
+  {
+    "owner": "00000006",
+    "brand": "fiat",
+    "model": "600",
+    "year": "1977",
+    "patent": "fia006",
+    "color": "gris",
+    "owid" : "1"
+  },
+  {
+    "owner": "00000007",
+    "brand": "brand34",
+    "model": "model34",
+    "year": "2022",
+    "patent": "patent125",
+    "color": "blanco",
+    "owid" : "3"
+  },
+  {
+    "owner": "00000008",
+    "brand": "ford",
+    "model": "fiesta",
+    "year": "2018",
+    "patent": "for008",
+    "color": "rojo",
+    "owid" : "2"
+  }
+]

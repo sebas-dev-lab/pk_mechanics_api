@@ -1,0 +1,30 @@
+[
+  {
+    "name": "ownername01",
+    "lastname": "ownerlastname01",
+    "dni": "00000001",
+    "cellphone": "00000000001",
+    "email": "owneremail01@email.com"
+  },
+  {
+    "name": "ownername02",
+    "lastname": "ownerlastname02",
+    "dni": "00000002",
+    "cellphone": "00000000002",
+    "email": "owneremail02@email.com"
+  },
+  {
+    "name": "ownername03",
+    "lastname": "ownerlastname03",
+    "dni": "00000003",
+    "cellphone": "00000000003",
+    "email": "owneremail03@email.com"
+  },
+  {
+    "name": "ownername04",
+    "lastname": "ownerlastname04",
+    "dni": "00000004",
+    "cellphone": "00000000004",
+    "email": "owneremail04@email.com"
+  }
+]

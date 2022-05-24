@@ -1,0 +1,14 @@
+[
+  {
+    "type": "C",
+    "title": "gris",
+    "description": "No se permite el servicio de Pintura para autos de color GRIS.",
+    "permission": "NA"
+  },
+  {
+    "type": "Y",
+    "title": "2000",
+    "description": "No se permite el servicio Seleccionado para autos de agnos anteriores al 2000.",
+    "permission": "NA"
+  }
+]
