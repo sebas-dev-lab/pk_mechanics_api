@@ -36,6 +36,7 @@
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
+    "newman-reporter-htmlextra": "^1.22.9",
     "node-rsa": "^1.1.1",
     "nodemon": "^2.0.15",
     "pg": "^8.7.3",

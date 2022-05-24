@@ -66,6 +66,7 @@ export default class TransactionsServices implements TransactionsInterface {
         return this.setResponse('403', true);
       }
 
+      console.log(data)
       const newTransaction = await db.Transactions.create({
         cid: crControl.dataValues.id,
         owid: owControl.dataValues.id,

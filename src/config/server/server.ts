@@ -9,6 +9,8 @@ import Envconfig from './Envconfig';
 import { Settings, ServerInterface } from '../interfaces/Server.interface';
 // Database
 import db from '../db/models';
+// Setting
+import path from 'path';
 
 /**
  * @class Server configuration
@@ -50,6 +52,9 @@ export default class Server extends Envconfig implements ServerInterface {
       res.setHeader('X-Powered-By', 'VSL');
       next();
     });
+    this.app.get('/', (req, res) =>{
+      res.sendFile(path.join(__dirname, '../../ViewReport/index.html'));
+    })
   }
 
   /**

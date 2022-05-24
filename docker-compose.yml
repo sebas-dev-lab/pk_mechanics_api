@@ -6,17 +6,16 @@ services:
       context: .
       dockerfile: mysql.dockerfile
     container_name: db_mysql
-    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=mechanicsdb
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
+      MYSQL_ROOT_PASSWORD: "Fayser17"
+      MYSQL_DATABASE: "mechanicsdb"
+      MYSQL_USER: "userdev"
+      MYSQL_PASSWORD: "comuserdev"
     volumes:
-      - schemas:/var/lib/mysql:rw
+      - ./schemas:/var/lib/mysql:rw
     networks:
       - db-net
 

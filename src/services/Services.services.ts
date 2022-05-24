@@ -36,9 +36,10 @@ export default class ServicesService implements ServicesInterface {
       }
 
       await s.addPolicies(p)
-      const f = await s.getPolicies()
+      
+      const svs = await db.Service.findOne({ where: { id: newService.dataValues.id }})
 
-      return this.setResponse('201', false, f);
+      return this.setResponse('201', false, svs);
     }catch(e:any){
       return this.setResponse(e.message, true);
 

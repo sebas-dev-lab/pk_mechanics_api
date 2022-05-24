@@ -1,0 +1,2399 @@
+{
+	"info": {
+		"_postman_id": "2c00764e-7ba7-48d8-8c36-60c4295c0097",
+		"name": "Test_Pikit",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12802855"
+	},
+	"item": [
+		{
+			"name": "Owner-success",
+			"item": [
+				{
+					"name": "ow_create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"})\r",
+									"pm.test(\"Response must have data attribute with new owner data.\", () => {\r",
+									"    const response = pm.response.json()\r",
+									"    const keys = Object.keys(response.data)\r",
+									"    pm.environment.set('owneroid', response.data.oid)\r",
+									"    pm.expect(response.hasOwnProperty('data')).to.be.equal(true)\r",
+									"    pm.expect(keys.includes('oid') && keys.includes('active') && keys.includes('name')).to.be.equal(true)\r",
+									"\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"const nums = '0123456789';\r",
+									"function generateNumbersString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = nums.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"let ownername = `owner${generateString(4)}`;\r",
+									"let ownerlastname = `owner${generateString(4)}`;\r",
+									"let ownerdni = `owner${generateNumbersString(8)}`;\r",
+									"let ownercellphone = `owner${generateNumbersString(9)}`;\r",
+									"let owneremail = `owner${generateString(4)}@email.com`;\r",
+									"\r",
+									"pm.environment.set('ownername', ownername);\r",
+									"pm.environment.set('ownerlastname', ownerlastname);\r",
+									"pm.environment.set('ownerdni', ownerdni);\r",
+									"pm.environment.set('ownercellphone', ownercellphone);\r",
+									"pm.environment.set('owneremail', owneremail);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{ownername}}\",\r\n    \"lastname\": \"{{ownerlastname}}\",\r\n    \"dni\": \"{{ownerdni}}\",\r\n    \"cellphone\": \"{{ownercellphone}}\",\r\n    \"email\": \"{{owneremail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/owners/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"owners",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ow_getbyoid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response must have data attribute with new owner data.\", () => {\r",
+									"    const response = pm.response.json()\r",
+									"    const keys = Object.keys(response.data)\r",
+									"    pm.expect(response.hasOwnProperty('data')).to.be.equal(true)\r",
+									"    pm.expect(keys.includes('active') && keys.includes('name')).to.be.equal(true)\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/owners/byowid/{{owneroid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"owners",
+								"byowid",
+								"{{owneroid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ow_getbydata",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response must have data attribute with new owner data.\", () => {\r",
+									"    const response = pm.response.json()\r",
+									"    const keys = response.data\r",
+									"    pm.expect(response.hasOwnProperty('data')).to.be.equal(true)\r",
+									"    for(let i in keys){\r",
+									"        console.log(keys[i])\r",
+									"        pm.expect(keys[i].hasOwnProperty('active') && keys[i].hasOwnProperty('name')).to.be.equal(true)\r",
+									"    }\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/owners/bydata?dni={{ownerdni}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"owners",
+								"bydata"
+							],
+							"query": [
+								{
+									"key": "dni",
+									"value": "{{ownerdni}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ow_getAll",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response must have data attribute with new owner data.\", () => {\r",
+									"    const response = pm.response.json()\r",
+									"    const keys = response.data\r",
+									"    pm.expect(response.hasOwnProperty('data')).to.be.equal(true)\r",
+									"    for(let i in keys){\r",
+									"        console.log(keys[i])\r",
+									"        pm.expect(keys[i].hasOwnProperty('oid') && keys[i].hasOwnProperty('active') && keys[i].hasOwnProperty('name')).to.be.equal(true)\r",
+									"    }\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/owners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"owners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ow_update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"const nums = '0123456789';\r",
+									"function generateNumbersString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = nums.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"let ownernameedited = `owner${generateString(4)}`;\r",
+									"let ownercellphoneedited = `owner${generateNumbersString(9)}`;\r",
+									"\r",
+									"pm.environment.set('ownernameedited', ownernameedited);\r",
+									"pm.environment.set('ownercellphoneedited', ownercellphoneedited);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cellphone\": \"{{ownercellphoneedited}}\",\r\n    \"name\": \"{{ownernameedited}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/owners/update/{{owneroid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"owners",
+								"update",
+								"{{owneroid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ow_delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/owners/delete/{{owneroid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"owners",
+								"delete",
+								"{{owneroid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ow_getbyoid_NotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 404\", () => {\r",
+									"    pm.response.to.have.status(404);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/owners/byowid/{{owneroid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"owners",
+								"byowid",
+								"{{owneroid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ow_create_to_next_step",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"})\r",
+									"pm.test(\"Response must have data attribute with new owner data.\", () => {\r",
+									"    const response = pm.response.json()\r",
+									"    const keys = Object.keys(response.data)\r",
+									"    pm.environment.set('owneroid', response.data.oid)\r",
+									"    pm.expect(response.hasOwnProperty('data')).to.be.equal(true)\r",
+									"    pm.expect(keys.includes('oid') && keys.includes('active') && keys.includes('name')).to.be.equal(true)\r",
+									"\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"const nums = '0123456789';\r",
+									"function generateNumbersString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = nums.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"let ownername = `owner${generateString(4)}`;\r",
+									"let ownerlastname = `owner${generateString(4)}`;\r",
+									"let ownerdni = `owner${generateNumbersString(8)}`;\r",
+									"let ownercellphone = `owner${generateNumbersString(9)}`;\r",
+									"let owneremail = `owner${generateString(4)}@email.com`;\r",
+									"\r",
+									"pm.environment.set('ownername', ownername);\r",
+									"pm.environment.set('ownerlastname', ownerlastname);\r",
+									"pm.environment.set('ownerdni', ownerdni);\r",
+									"pm.environment.set('ownercellphone', ownercellphone);\r",
+									"pm.environment.set('owneremail', owneremail);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{ownername}}\",\r\n    \"lastname\": \"{{ownerlastname}}\",\r\n    \"dni\": \"{{ownerdni}}\",\r\n    \"cellphone\": \"{{ownercellphone}}\",\r\n    \"email\": \"{{owneremail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/owners/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"owners",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Car-success",
+			"item": [
+				{
+					"name": "cr_create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"const nums = '0123456789';\r",
+									"function generateNumbersString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = nums.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"const colors = [\"amarillo\",\"negro\",\"azul\",\"rojo\"];\r",
+									"function generateRandomColor() {\r",
+									"        return colors[Math.floor(Math.random() * colors.length)];;\r",
+									"};\r",
+									"\r",
+									"let carmodel = `car${generateString(4)}`;\r",
+									"let carbrand = `car${generateString(4)}`;\r",
+									"let caryear = `${generateNumbersString(4)}`;\r",
+									"let carpatent = `car${generateNumbersString(3)}`;\r",
+									"let carcolor = `${generateRandomColor()}`;\r",
+									"\r",
+									"pm.environment.set('carbrand', carbrand);\r",
+									"pm.environment.set('carmodel', carmodel);\r",
+									"pm.environment.set('caryear', caryear);\r",
+									"pm.environment.set('carpatent', carpatent);\r",
+									"pm.environment.set('carcolor', carcolor);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"})\r",
+									"pm.test(\"Response must have data attribute with new owner data.\", () => {\r",
+									"    const response = pm.response.json()\r",
+									"    const keys = Object.keys(response.data)\r",
+									"    pm.environment.set('carcid', response.data.cid)\r",
+									"    pm.expect(response.hasOwnProperty('data')).to.be.equal(true)\r",
+									"    pm.expect(keys.includes('cid') && keys.includes('active') && keys.includes('color')).to.be.equal(true)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"{{carbrand}}\",\r\n    \"model\": \"{{carmodel}}\",\r\n    \"year\": \"{{caryear}}\",\r\n    \"patent\": \"{{carpatent}}\",\r\n    \"color\": \"{{carcolor}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/cars/register/{{owneroid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"cars",
+								"register",
+								"{{owneroid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cr_getAllCarOwner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/cars/owner/{{owneroid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"cars",
+								"owner",
+								"{{owneroid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cr_getCarOwnerByCid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/cars/owner/car/{{owneroid}}?car={{carcid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"cars",
+								"owner",
+								"car",
+								"{{owneroid}}"
+							],
+							"query": [
+								{
+									"key": "car",
+									"value": "{{carcid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cr_getAllCars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/cars",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cr_updateCarOwner",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"let carmodel = `car${generateString(4)}`;\r",
+									"let carbrand = `car${generateString(4)}`;\r",
+									"\r",
+									"pm.environment.set('carbrandedited', carbrand);\r",
+									"pm.environment.set('carmodeledited', carmodel);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"{{carbrandedited}}\",\r\n    \"model\": \"{{carmodeledited}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/cars/owner/car/{{owneroid}}?car={{carcid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"cars",
+								"owner",
+								"car",
+								"{{owneroid}}"
+							],
+							"query": [
+								{
+									"key": "car",
+									"value": "{{carcid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cr_deleteCarOwner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/cars/owner/car/{{owneroid}}?car={{carcid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"cars",
+								"owner",
+								"car",
+								"{{owneroid}}"
+							],
+							"query": [
+								{
+									"key": "car",
+									"value": "{{carcid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cr_getCarOwnerByCid_next_step",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 404\", () => {\r",
+									"    pm.response.to.have.status(404);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/cars/owner/car/{{owneroid}}?car={{carcid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"cars",
+								"owner",
+								"car",
+								"{{owneroid}}"
+							],
+							"query": [
+								{
+									"key": "car",
+									"value": "{{carcid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cr_create_next_step",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"const nums = '0123456789';\r",
+									"function generateNumbersString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = nums.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"const colors = ['gris',\"negro\",\"azul\",\"rojo\"];\r",
+									"function generateRandomColor() {\r",
+									"        return colors[Math.floor(Math.random() * colors.length)];;\r",
+									"};\r",
+									"\r",
+									"let carmodel = `car${generateString(4)}`;\r",
+									"let carbrand = `car${generateString(4)}`;\r",
+									"let caryear = `${generateNumbersString(4)}`;\r",
+									"let carpatent = `car${generateNumbersString(3)}`;\r",
+									"let carcolor = `${generateRandomColor()}`;\r",
+									"\r",
+									"pm.environment.set('carbrand', carbrand);\r",
+									"pm.environment.set('carmodel', carmodel);\r",
+									"pm.environment.set('caryear', caryear);\r",
+									"pm.environment.set('carpatent', carpatent);\r",
+									"pm.environment.set('carcolor', carcolor);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"})\r",
+									"pm.test(\"Response must have data attribute with new owner data.\", () => {\r",
+									"    const response = pm.response.json()\r",
+									"    const keys = Object.keys(response.data)\r",
+									"    pm.environment.set('carcid', response.data.cid)\r",
+									"    pm.expect(response.hasOwnProperty('data')).to.be.equal(true)\r",
+									"    pm.expect(keys.includes('cid') && keys.includes('active') && keys.includes('color')).to.be.equal(true)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"{{carbrand}}\",\r\n    \"model\": \"{{carmodel}}\",\r\n    \"year\": \"{{caryear}}\",\r\n    \"patent\": \"{{carpatent}}\",\r\n    \"color\": \"{{carcolor}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/cars/register/{{owneroid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"cars",
+								"register",
+								"{{owneroid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Policy-success",
+			"item": [
+				{
+					"name": "pl_createPolicy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"let policydescription = `policy${generateString(30)}`;\r",
+									"pm.environment.set('policydescription', policydescription);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"})\r",
+									"pm.test(\"Response must have data attribute with new owner data.\", () => {\r",
+									"    const response = pm.response.json()\r",
+									"    const keys = Object.keys(response.data)\r",
+									"    pm.environment.set('policyid', response.data.id)\r",
+									"    pm.expect(response.hasOwnProperty('data')).to.be.equal(true)\r",
+									"    pm.expect(keys.includes('id') && keys.includes('title') && keys.includes('permission')).to.be.equal(true)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"C\",\r\n    \"title\": \"{{carcolor}}\",\r\n    \"description\": \"{{policydescription}}\",\r\n    \"permission\": \"NA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/policies/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"policies",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pl_getPolicyById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/policies/{{policyid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"policies",
+								"{{policyid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pl_getAllPolicies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/policies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"policies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pl_updatePolicy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"let policydescriptionedited = `policyedited${generateString(30)}`;\r",
+									"pm.environment.set('policydescriptionedited', policydescriptionedited);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"{{policydescriptionedited}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/policies/update/{{policyid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"policies",
+								"update",
+								"{{policyid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pl_deletePolicy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/policies/delete/{{policyid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"policies",
+								"delete",
+								"{{policyid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pl_getPolicyById_notfound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 404\", () => {\r",
+									"    pm.response.to.have.status(404);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/policies/{{policyid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"policies",
+								"{{policyid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pl_createPolicy_Next_step",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"let policydescription = `policy${generateString(30)}`;\r",
+									"pm.environment.set('policydescription', policydescription);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"})\r",
+									"pm.test(\"Response must have data attribute with new owner data.\", () => {\r",
+									"    const response = pm.response.json()\r",
+									"    const keys = Object.keys(response.data)\r",
+									"    pm.environment.set('policyid', response.data.id)\r",
+									"    pm.expect(response.hasOwnProperty('data')).to.be.equal(true)\r",
+									"    pm.expect(keys.includes('id') && keys.includes('title') && keys.includes('permission')).to.be.equal(true)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"C\",\r\n    \"title\": \"{{carcolor}}\",\r\n    \"description\": \"{{policydescription}}\",\r\n    \"permission\": \"NA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/policies/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"policies",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Services-success",
+			"item": [
+				{
+					"name": "sv_createService",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"const nums = '0123456789';\r",
+									"function generateNumbersString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = nums.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"let servicename = `service${generateString(10)}`;\r",
+									"let serviceamount = Number(generateNumbersString(10));\r",
+									"\r",
+									"pm.environment.set('servicename', servicename);\r",
+									"pm.environment.set('serviceamount', serviceamount);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"active\": true,\r\n    \"name\": \"{{servicename}}\",\r\n    \"amount\": 1220,\r\n    \"pid\": [2] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/services/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"services",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sv_getAllServices",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"const rsp = pm.response.json()\r",
+									"console.log(rsp)\r",
+									"console.log(pm.environment.get(\"servicename\"))\r",
+									"const target = rsp.data.filter(item => item.name === pm.environment.get(\"servicename\"))\r",
+									"pm.environment.set(\"servicesid\", target[0].sid)\r",
+									"pm.environment.set(\"serviceid\", target[0].id)\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/services",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sv_getServicesById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/services/{{servicesid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"services",
+								"{{servicesid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sv_updateService",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 2778\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/services/update/{{servicesid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"services",
+								"update",
+								"{{servicesid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sv_updatePolicyService",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"policy\": [{{policyid}}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/services/update/policy/{{servicesid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"services",
+								"update",
+								"policy",
+								"{{servicesid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sv_deleteService",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/services/delete/{{servicesid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"services",
+								"delete",
+								"{{servicesid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sv_getServicesById_notfound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 404\", () => {\r",
+									"    pm.response.to.have.status(404);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/services/{{servicesid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"services",
+								"{{servicesid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sv_createService_next_steps",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"function generateString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"const nums = '0123456789';\r",
+									"function generateNumbersString(length) {\r",
+									"    let result = '';\r",
+									"    const charactersLength = nums.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"        return result;\r",
+									"};\r",
+									"\r",
+									"let servicename = `service${generateString(10)}`;\r",
+									"let serviceamount = Number(generateNumbersString(10));\r",
+									"\r",
+									"pm.environment.set('servicename', servicename);\r",
+									"pm.environment.set('serviceamount', serviceamount);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"})\r",
+									"\r",
+									"const rsp = pm.response.json()\r",
+									"pm.environment.set(\"servicesid\", rsp.sid)\r",
+									"pm.environment.set(\"serviceid\", rsp.id)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"active\": true,\r\n    \"name\": \"{{servicename}}\",\r\n    \"amount\": 1220,\r\n    \"pid\": [2] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/services/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"services",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions-success",
+			"item": [
+				{
+					"name": "ts_createTransaction_allowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cid\": \"{{carcid}}\",\r\n    \"owid\": \"{{owneroid}}\",\r\n    \"status\": \"a\",\r\n    \"svid\": [1]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/transactions/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ts_getTransactionsByCar&Owner&Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"owid\": \"{{owneroid}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ts_getTransactionById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/transactions/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ts_updateTransactionByid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"c\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/transactions/update/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"update",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ts_getTransactionById_testupdate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/transactions/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Specifi_requirements_NoGreyColorAllowed",
+			"item": [
+				{
+					"name": "getAllOwners",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response must have data attribute with new owner data.\", () => {\r",
+									"    const response = pm.response.json()\r",
+									"    pm.environment.set(\"ownerReqoid\",  response.data[0].oid)\r",
+									"    const keys = response.data\r",
+									"    pm.expect(response.hasOwnProperty('data')).to.be.equal(true)\r",
+									"    for(let i in keys){\r",
+									"        pm.expect(keys[i].hasOwnProperty('oid') && keys[i].hasOwnProperty('active') && keys[i].hasOwnProperty('name')).to.be.equal(true)\r",
+									"    }\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/owners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"owners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllCarOwner_select_greyCar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"const response = pm.response.json()\r",
+									"pm.environment.set(\"carReqcid\",  response.data.Cars[1].cid)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/cars/owner/{{ownerReqoid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"cars",
+								"owner",
+								"{{ownerReqoid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllServices",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"const response = pm.response.json().data.filter(item => item.name === \"Pintura\")\r",
+									"console.log(response)\r",
+									"response.forEach((item, j) => {\r",
+									"    pm.environment.set(`serice${j}`, item.id)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/services",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transaction_NotAllowet_ColorPolicy_greyNA",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 403\", () => {\r",
+									"    pm.response.to.have.status(403);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cid\": \"{{carReqcid}}\",\r\n    \"owid\": \"{{ownerReqoid}}\",\r\n    \"status\": \"a\",\r\n    \"svid\": [{{serice0}}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/transactions/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Specific_requirements_GetTransactionsHistoryByCar",
+			"item": [
+				{
+					"name": "getCarOwnerByCid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/cars/owner/car/{{owneroid}}?car={{carcid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"cars",
+								"owner",
+								"car",
+								"{{owneroid}}"
+							],
+							"query": [
+								{
+									"key": "car",
+									"value": "{{carcid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllServices",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"const response = pm.response.json().data.filter(item => item.name !== \"Pintura\" && item.name !== \"Otro\")\r",
+									"console.log(response)\r",
+									"response.forEach((item, j) => {\r",
+									"    pm.environment.set(`serice${j}`, item.id)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/api/v1/services",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ts_getTransactionsByCar&Owner&Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"owid\": \"{{owneroid}}\",\r\n    \"cid\": \"{{carcid}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaction_>1services",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cid\": \"{{carcid}}\",\r\n    \"owid\": \"{{owneroid}}\",\r\n    \"status\": \"a\",\r\n    \"svid\": [{{serice0}},{{serice1}},{{serice2}}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/transactions/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ts_getTransactionsByCar&Owner&Status Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code response must be 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"owid\": \"{{owneroid}}\",\r\n    \"cid\": \"{{carcid}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/api/v1/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.request.headers.add({key: 'x-server-key', value: 'A3]$.,tP~3NwegMA', disabled: false })"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
